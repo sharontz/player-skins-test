@@ -16,6 +16,7 @@
   },
   "scripts": {
     "babel": "babel --presets es2015 transform-custom-element-classes  transform-es2015-classes skin/skin.js -o build/main.bundle.js",
+    "volume": "babel --presets es2015 transform-custom-element-classes  transform-es2015-classes core/components/volume-slider-horizontal.js -o build/volume.bundle.js",
     "start": "http-server",
     "webpack": "webpack"
   },

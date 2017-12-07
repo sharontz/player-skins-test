@@ -3395,6 +3395,8 @@ vdb.skins["skin6"] = vdb.skins.BaseSkin.extend(function() {
 
         this.volumeSliderComponent =  document.createElement('volume-slider');
         this.volumeSliderComponent.init(this.controller, this.buttonsWrapper, volumeSliderIcons);
+
+
         this.ccButtonCell = utl.createElement("div", {"class":"cc-button-cell", "style":"display: none;"}, this.buttonsWrapper);
         this.setCcButton(utl.createElement("div", {"class":"cc-button"}, this.ccButtonCell, '<svg class="player-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 10"><path d="M8.9,8.3c-1.1,1-2.3,1.5-3.7,1.5C1.4,9.8,0,7.5,0,5c0-2.4,1.6-5,5.1-5c1.3,0,2.6,0.5,3.6,1.5 L7.1,3.1c-0.7-0.6-1.4-0.8-2-0.8C3.3,2.3,2.6,3.7,2.6,5c0,1.2,0.7,2.6,2.5,2.6c0.6,0,1.5-0.3,2.2-0.9L8.9,8.3z"/><path d="M18,8.3c-1.1,1-2.3,1.5-3.7,1.5c-3.7,0-5.1-2.3-5.1-4.8c0-2.4,1.6-5,5.1-5c1.3,0,2.6,0.5,3.6,1.5 l-1.6,1.6c-0.7-0.6-1.4-0.8-2-0.8c-1.8,0-2.5,1.5-2.5,2.7c0,1.2,0.7,2.6,2.5,2.6c0.6,0,1.5-0.3,2.2-0.9L18,8.3z"/></svg> '));
         this.hdButtonCell = utl.createElement("div", {"class":"hd-button-cell", "style":"display: none;"}, this.buttonsWrapper);

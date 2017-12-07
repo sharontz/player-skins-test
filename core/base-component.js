@@ -12,11 +12,6 @@ class BaseComponent extends HTMLElement {
         }
     }
 
-    constructor () {
-        super()
-        this.createdCallback()
-    }
-
     // Native DOM Api V1
 
     createdCallback () {

@@ -1,11 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/custom-elements/1.0.6/custom-elements.min.js"></script>
-</head>
-<body>
 
-</body>
-</html>
+
+<div class="custom-skin">
+    <full-screen-button></full-screen-button>
+    <full-screen-button></full-screen-button>
+    <full-screen-button></full-screen-button>
+</div>
+
+<script>
+    class BaseSkin {
+
+        constructor(){
+//            this.videoContainer = vdb.getContext(Object.keys(vdb._getContexts())[0]).getPlayer().div;
+        }
+
+        addToMainContainer(el){
+//            this.videoContainer.appendChild(el);
+        }
+
+        addToContainer(container, el){
+            this.videoContainer.getElementsByClassName(container)[0].appendChild(el);
+        }
+
+        setTemplate(template){
+            this.template = template;
+        }
+
+        render(){
+            [...this.template.children].forEach((child)=>{
+                this.addToContainer('control-bar-wrapper', child)
+            })
+        }
+    }
+
+    let mySkin = new BaseSkin();
+
+    mySkin.controlBarWrapper = document.createElement("div");
+    mySkin.controlBarWrapper.classList.add("control-bar-wrapper");
+    mySkin.addToMainContainer(mySkin.controlBarWrapper);
+
+    mySkin.setTemplate(document.getElementsByClassName("custom-skin")[0]);
+    mySkin.render();
+</script>
