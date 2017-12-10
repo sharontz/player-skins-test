@@ -20,3 +20,5 @@ function loadSkin (player){
 }
 
 window.loadSkin = loadSkin;
+
+loadSkin();

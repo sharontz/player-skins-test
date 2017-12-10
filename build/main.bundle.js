@@ -70,10 +70,6 @@
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
 var _skinNew = __webpack_require__(1);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -94,9 +90,6 @@ var CustomSkin = function (_BaseSkin) {
     return CustomSkin;
 }(_skinNew.BaseSkin);
 
-exports.default = CustomSkin;
-
-
 var html = "\n    <control-bar location=\"bottom\" justify-content=\"flex-end\" style=\"height:40px;\">\n        <play-button flex=\"15\"></play-button>\n        <hd-button flex=\"1\"></hd-button>\n        <full-screen-button flex=\"1\"></full-screen-button>\n    </control-bar>\n";
 
 function loadSkin(player) {
@@ -105,6 +98,8 @@ function loadSkin(player) {
 }
 
 window.loadSkin = loadSkin;
+
+loadSkin();
 
 /***/ }),
 /* 1 */
