@@ -1,15 +1,15 @@
-class ControlBar extends HTMLElement {
+import BaseComponent from "../base-component";
+
+export class ControlBar extends BaseComponent {
 
     constructor() {
         super();
-        if (!this.shadowRoot)
-            this.initShadowDom();
-        this.shadowRoot.appendChild(this.template.content.cloneNode(true));
+        this.tagName = 'control-bar';
     }
 
-    initShadowDom() {
-        let shadowRoot = this.attachShadow({mode: 'open'});
-    }
+    // get tagName(){
+    //     return 'control-bar';
+    // }
 
     static get observedAttributes() {
         return ['location', 'justify-content'];
@@ -87,6 +87,4 @@ class ControlBar extends HTMLElement {
     }`
     }
 }
-
-window.customElements.define('control-bar', ControlBar);
 

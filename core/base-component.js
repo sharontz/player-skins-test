@@ -1,39 +1,29 @@
-class BaseComponent extends HTMLElement {
+// need to extract all of the components' repeating methods to base component
 
-    static polyFill (url) {
-        if (!__flags.isWCSupported) {
-            const existingScript = document.querySelector('script[data-is-slim-polyfill="true"]')
-            if (!existingScript) {
-                const script = document.createElement('script')
-                script.setAttribute('data-is-slim-polyfill', 'true')
-                script.src = url
-                document.head.appendChild(script)
-            }
-        }
+export class BaseComponent extends HTMLElement {
+
+    constructor(){
+        super();
     }
 
-    // Native DOM Api V1
-
-    createdCallback () {
-
+    connectedCallback() {
+        if (!this.shadowRoot)
+            this.initShadowDom();
+        this._updateRendering();
     }
 
-    // Native DOM Api V2
-
-    connectedCallback () {
-
+    initShadowDom() {
+        let shadowRoot = this.attachShadow({mode: 'open'});
+        shadowRoot.innerHTML = this.template;
     }
 
-    disconnectedCallback () {
-
+    _updateRendering() {
+        this.shadowRoot.innerHTML = this.template;
     }
 
-    attributeChangedCallback(attr, oldValue, newValue) {
-
+    static registerComponent(name, component){
+        window.customElements.define(name, component);
     }
-
-    // Slim internal API
-
 }
 
 export default BaseComponent

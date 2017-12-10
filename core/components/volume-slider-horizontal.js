@@ -1,4 +1,4 @@
-var VolumeSliderHorizontal = document.registerElement('volume-slider', {
+/*var VolumeSliderHorizontal = document.registerElement('volume-slider', {
     prototype: Object.create(HTMLElement.prototype, {
         createdCallback: {
             value: function () {
@@ -118,7 +118,7 @@ var setVolume = function() {
 };
 
 export default VolumeSliderHorizontal;
-
+*/
 
 /*
 class VolumeSliderHorizontal extends HTMLElement {

@@ -1,8 +1,10 @@
+import {BaseComponent} from "../core/base-component";
+
 export class BaseSkin {
     constructor(template, player) {
         this.setTemplate(template);
         if (!player) {
-            this.player = vdb.getContext(Object.keys(vdb._getContexts())[0]).getPlayer()
+            this.player = vdb.getContext(Object.keys(vdb._getContexts())[0]).getPlayer();
             this.videoContainer = this.player.div;
         }
         else {
@@ -34,6 +36,12 @@ export class BaseSkin {
         [...this.template.children].forEach((child) => {
             child.player = this.player;
             this.addToMainContainer(child);
+        })
+    }
+
+    static loadDeps(deps){
+        deps.forEach((dep)=>{
+            BaseComponent.registerComponent(dep.tagName, dep.func);
         })
     }
 }

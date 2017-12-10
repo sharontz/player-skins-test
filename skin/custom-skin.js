@@ -1,8 +1,18 @@
 import {BaseSkin} from "./skin-new"
+import {ControlBar} from "../core/base/control-bar";
+import {PlayButton} from "../core/components/play-button";
+import {FullScreenButton} from "../core/components/full-screen-button";
+import {HDButton} from "../core/components/hd-button";
 
 class CustomSkin extends BaseSkin {
     constructor(template, player) {
-        super(template,player);
+        BaseSkin.loadDeps([
+        {tagName: 'control-bar', func: ControlBar},
+        {tagName: 'play-button', func: PlayButton},
+        {tagName: 'full-screen-button', func: FullScreenButton},
+        {tagName: 'hd-button', func: HDButton}])
+        super(template, player);
+
     }
 }
 
@@ -14,7 +24,7 @@ const html = `
     </control-bar>
 `
 
-function loadSkin (player){
+function loadSkin(player) {
     let mySkin = new CustomSkin(html, player);
     mySkin.render();
 }

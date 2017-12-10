@@ -1,8 +1,14 @@
-class PlayButton extends HTMLElement {
+import BaseComponent from "../base-component";
+
+export class PlayButton extends BaseComponent {
 
     constructor() {
         super();
         this.isPlaying = false;
+    }
+
+    get tagName(){
+        return 'play-button';
     }
 
     attachListeners() {
@@ -34,20 +40,8 @@ class PlayButton extends HTMLElement {
     }
 
     connectedCallback() {
-        if (!this.shadowRoot)
-            this.initShadowDom();
-        this.attachListeners();
         if(this.parentElement.player.getPlayerInfo().playerStatus === 'playing')
             this.isPlaying = true;
-    }
-
-    initShadowDom() {
-        let shadowRoot = this.attachShadow({mode: 'open'});
-        shadowRoot.innerHTML = this.template;
-    }
-
-    _updateRendering() {
-        this.shadowRoot.innerHTML = this.template;
     }
 
     clickHandler(e) {
@@ -83,8 +77,6 @@ class PlayButton extends HTMLElement {
         :host svg {height:100%;}`;
     }
 }
-
-window.customElements.define('play-button', PlayButton);
 
 const playIcon = ` <div class="play-icon can-animate">
  <svg width="25" class="player-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 7 10"><path d="M0,9.5C0,9,0,0.9,0,0.6c0-0.4,0.3-0.7,0.7-0.5c0.3,0.2,5.6,4.1,6.1,4.4c0.3,0.2,0.3,0.7,0,1 C6.4,5.7,1.1,9.7,0.7,9.9C0.4,10.2,0,9.9,0,9.5z"></path></svg>
