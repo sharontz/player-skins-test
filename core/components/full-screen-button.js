@@ -42,19 +42,26 @@ class FullScreenButton extends HTMLElement {
 
     get template() {
         return `
-<style>:host{width: auto;
+        <div class="fullscreen-cell control-button-cell">
+        <div class="fullscreen-button">
+        ${this.isFullScreen ? exitFullScreenSvg : enterFullScreenSvg}
+        </div>
+        </div>
+        <style>
+        ${this.style}
+        </style>
+        `;
+    }
+
+    get style(){
+        return `:host{width: auto;
         height: 100%;
         display: flex;
         align-items: flex-start;
         justify-content: center;
         padding-right:10px;}
-        :host svg {height:100%;}</style>
-<div class="fullscreen-cell control-button-cell">
-<div class="fullscreen-button">
-${this.isFullScreen ? exitFullScreenSvg : enterFullScreenSvg}
-</div>
-</div>
-    `;
+        :host svg {height:100%;}
+        `
     }
 }
 

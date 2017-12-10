@@ -10,17 +10,102 @@
 </head>
 <body>
 
-<div class="video-container" style="width:700px; margin:auto;">
 
+<div class="video-container" style="width:700px; margin:auto;">
     <!-- TAG START { player: "subtitle test by sharon", owner: "Vidible", for: "Vidible" } -->
-    <div id="5a23b0b385eb421baedcfd67" class="vdb_player vdb_5a23b0b385eb421baedcfd6750d595ec0364e95588c77bd2">
-        <script async type="text/javascript" src="http://localhost:63342/player-skins-test/ds.js"></script>
-    </div>
+        <div id="5a23b0b385eb421baedcfd67" class="vdb_player vdb_5a23b0b385eb421baedcfd6750d595ec0364e95588c77bd2">
+            <script async type="text/javascript" src="http://localhost:63342/player-skins-test/ds.js"></script>
+            <script type='text/javascript'>
+
+                function onPlayerReady(player) {
+                    let mySkin = new BaseSkin(player);
+                    mySkin.setTemplate(document.getElementsByClassName("custom-skin")[0]);
+                    mySkin.render();
+
+                }
+
+            setTimeout(()=>{
+                (function(div, cb){
+                    if (div.vdb_Player) {
+                        cb(div.vdb_Player);
+                    } else {
+                        var fn = arguments.callee;
+                        setTimeout(function(){ fn(div,cb); },0);
+                    }
+                })(document.getElementById("5a23b0b385eb421baedcfd67"), onPlayerReady);
+            },2000)
+
+            </script>
+        </div>
 
     <!-- TAG END { date: 12/05/17 } -->
 
 
-    <volume-slider></volume-slider>
-    <basic-element></basic-element></div>
+</div>
+
+
+<!--Load relevant components-->
+<script src="core/base/control-bar.js"></script>
+<script src="core/components/play-button.js"></script>
+<script src="core/components/full-screen-button.js"></script>
+<script src="core/components/hd-button.js"></script>
+
+
+<!--HTML Structure-->
+<div class="custom-skin" style="opacity:0;">
+    <control-bar location="bottom" justify-content="flex-end" style="height:40px;">
+        <play-button></play-button>
+        <hd-button flex="1"></hd-button>
+        <full-screen-button flex="1"></full-screen-button>
+    </control-bar>
+</div>
+
+
+<!--Relevant Skin Script ( Renders the HTML template into the player/placeholder )-->
+<script>
+
+    class BaseSkin {
+
+        constructor(player) {
+            if(!player) {
+                this.player = vdb.getContext(Object.keys(vdb._getContexts())[0]).getPlayer()
+                this.videoContainer = this.player.div;
+            }
+            else{
+                this.player = player;
+                this.videoContainer = player.div;
+            }
+        }
+
+        addToMainContainer(el) {
+            el.player = this.player;
+            this.videoContainer.appendChild(el);
+        }
+
+        addToContainer(container, el) {
+            this.videoContainer.getElementsByClassName(container)[0].appendChild(el);
+        }
+
+        setTemplate(template) {
+            this.template = template;
+        }
+
+        render() {
+            [...this.template.children].forEach((child) => {
+                this.addToMainContainer(child);
+            })
+        }
+    }
+
+
+
+</script>
+
+
+<style>
+    .video-container{
+        position:relative;
+    }
+</style>
 </body>
 </html>

@@ -51,8 +51,16 @@ class ControlBar extends HTMLElement {
     get template() {
         let template = document.createElement('template');
         template.innerHTML = `
-<style>
- :host {
+             <slot></slot>
+             <style>
+            ${this.style}
+            </style>
+            `
+        return template;
+    }
+
+    get style(){
+        return `:host {
         width: 100%;
         height: 5%;
         overflow: hidden;
@@ -76,11 +84,7 @@ class ControlBar extends HTMLElement {
 
     :host > * svg{
         width: 100%;
-    }
-</style>
-             <slot></slot>
-  `
-        return template;
+    }`
     }
 }
 
