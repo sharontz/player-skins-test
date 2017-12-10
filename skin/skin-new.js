@@ -1,32 +1,39 @@
-class BaseSkin {
-
-    constructor(){
-        this.videoContainer = vdb.getContext(Object.keys(vdb._getContexts())[0]).getPlayer().div;
+export class BaseSkin {
+    constructor(template, player) {
+        this.setTemplate(template);
+        if (!player) {
+            this.player = vdb.getContext(Object.keys(vdb._getContexts())[0]).getPlayer()
+            this.videoContainer = this.player.div;
+        }
+        else {
+            this.player = player;
+            this.videoContainer = player.div;
+        }
     }
 
-    addToMainContainer(el){
-      this.videoContainer.appendChild(el);
+    addToMainContainer(el) {
+        el.player = this.player;
+        this.videoContainer.appendChild(el);
     }
 
-    addToContainer(container, el){
+    addToContainer(container, el) {
         this.videoContainer.getElementsByClassName(container)[0].appendChild(el);
     }
 
-    setTemplate(template){
-        this.template = template;
+    setTemplate(template) {
+        if(typeof template === 'string'){
+            this.template =  document.createElement('custom-skin');
+            this.template.innerHTML = template;
+        }
+        else {
+            this.template = template;
+        }
     }
 
-    render(){
-        [...this.template.children].forEach((child)=>{
-            this.addToContainer('control-bar-wrapper', child)
+    render() {
+        [...this.template.children].forEach((child) => {
+            child.player = this.player;
+            this.addToMainContainer(child);
         })
     }
 }
-
-let mySkin = new BaseSkin();
-
-mySkin.controlBarWrapper = document.createElement("div");
-mySkin.controlBarWrapper.classList.add("control-bar-wrapper");
-mySkin.addToMainContainer(mySkin.controlBarWrapper);
-
-mySkin.setTemplate(document.getElementsByClassName("custom-skin")[0]);

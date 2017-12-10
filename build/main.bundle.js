@@ -70,55 +70,108 @@
 "use strict";
 
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _skinNew = __webpack_require__(1);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var BaseSkin = function () {
-    function BaseSkin() {
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CustomSkin = function (_BaseSkin) {
+    _inherits(CustomSkin, _BaseSkin);
+
+    function CustomSkin(template, player) {
+        _classCallCheck(this, CustomSkin);
+
+        return _possibleConstructorReturn(this, (CustomSkin.__proto__ || Object.getPrototypeOf(CustomSkin)).call(this, template, player));
+    }
+
+    return CustomSkin;
+}(_skinNew.BaseSkin);
+
+exports.default = CustomSkin;
+
+
+var html = "\n    <control-bar location=\"bottom\" justify-content=\"flex-end\" style=\"height:40px;\">\n        <play-button flex=\"15\"></play-button>\n        <hd-button flex=\"1\"></hd-button>\n        <full-screen-button flex=\"1\"></full-screen-button>\n    </control-bar>\n";
+
+function loadSkin(player) {
+    var mySkin = new CustomSkin(html, player);
+    mySkin.render();
+}
+
+window.loadSkin = loadSkin;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var BaseSkin = exports.BaseSkin = function () {
+    function BaseSkin(template, player) {
         _classCallCheck(this, BaseSkin);
 
-        this.videoContainer = vdb.getContext(Object.keys(vdb._getContexts())[0]).getPlayer().div;
+        this.setTemplate(template);
+        if (!player) {
+            this.player = vdb.getContext(Object.keys(vdb._getContexts())[0]).getPlayer();
+            this.videoContainer = this.player.div;
+        } else {
+            this.player = player;
+            this.videoContainer = player.div;
+        }
     }
 
     _createClass(BaseSkin, [{
-        key: "addToMainContainer",
+        key: 'addToMainContainer',
         value: function addToMainContainer(el) {
+            el.player = this.player;
             this.videoContainer.appendChild(el);
         }
     }, {
-        key: "addToContainer",
+        key: 'addToContainer',
         value: function addToContainer(container, el) {
             this.videoContainer.getElementsByClassName(container)[0].appendChild(el);
         }
     }, {
-        key: "setTemplate",
+        key: 'setTemplate',
         value: function setTemplate(template) {
-            this.template = template;
+            if (typeof template === 'string') {
+                this.template = document.createElement('custom-skin');
+                this.template.innerHTML = template;
+            } else {
+                this.template = template;
+            }
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
             var _this = this;
 
-            this.template.childNodes.forEach(function (child) {
-                _this.addToContainer('control-bar-wrapper', child);
+            [].concat(_toConsumableArray(this.template.children)).forEach(function (child) {
+                child.player = _this.player;
+                _this.addToMainContainer(child);
             });
         }
     }]);
 
     return BaseSkin;
 }();
-
-var mySkin = new BaseSkin();
-
-mySkin.controlBarWrapper = document.createElement("div");
-mySkin.controlBarWrapper.classList.add("control-bar-wrapper");
-mySkin.addToMainContainer(mySkin.controlBarWrapper);
-
-var customSkin = "\n<full-screen-button></full-screen-button>\n<full-screen-button></full-screen-button>\n<full-screen-button></full-screen-button>\n";
-
-mySkin.setTemplate(customSkin);
 
 /***/ })
 /******/ ]);

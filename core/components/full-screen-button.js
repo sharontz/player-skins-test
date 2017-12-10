@@ -7,9 +7,16 @@ class FullScreenButton extends HTMLElement {
 
     attachListeners() {
         this.addEventListener('click', e => {
-            if(this.hasAttribute('full-screen'))
+            if (this.hasAttribute('full-screen')) {
                 this.removeAttribute('full-screen');
-            else this.setAttribute('full-screen', '');
+
+            }
+            else {
+                this.setAttribute('full-screen', '');
+                if (this.parentElement.player.adapter.enterFullscreen) {
+                    this.parentElement.player.adapter.enterFullscreen();
+                }
+            }
         })
     }
 
@@ -34,7 +41,7 @@ class FullScreenButton extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if (name === 'full-screen') {
             if (this.hasAttribute("full-screen"))
-            this.isFullScreen = true;
+                this.isFullScreen = true;
             else this.isFullScreen = false;
             this._updateRendering();
         }
@@ -48,18 +55,20 @@ class FullScreenButton extends HTMLElement {
         </div>
         </div>
         <style>
-        ${this.style}
+        ${this.componentStyle}
         </style>
         `;
     }
 
-    get style(){
+    get componentStyle() {
         return `:host{width: auto;
         height: 100%;
         display: flex;
         align-items: flex-start;
         justify-content: center;
-        padding-right:10px;}
+        padding-right:10px;
+        flex: ${this.hasAttribute('flex') ? this.getAttribute('flex') : '1'};
+        }
         :host svg {height:100%;}
         `
     }

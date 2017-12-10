@@ -53,13 +53,13 @@ class ControlBar extends HTMLElement {
         template.innerHTML = `
              <slot></slot>
              <style>
-            ${this.style}
+            ${this.componentStyle}
             </style>
             `
         return template;
     }
 
-    get style(){
+    get componentStyle(){
         return `:host {
         width: 100%;
         height: 5%;
