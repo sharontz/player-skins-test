@@ -30,7 +30,7 @@ class ControlBar extends HTMLElement {
         if (name === 'location' && this.location !== oldValue) {
             this.location = newValue;
         }
-        if(name === 'justify-content'){
+        if (name === 'justify-content') {
             this.style['justifyContent'] = newValue;
         }
     }
@@ -54,13 +54,14 @@ class ControlBar extends HTMLElement {
 <style>
  :host {
         width: 100%;
-        height: 10%;
+        height: 5%;
         overflow: hidden;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         align-items: center;
         justify-content: space-evenly;
+        background-color:lightgray;
         /*display: grid;*/
         /*grid: repeat(1, 100%) / auto-flow auto;*/
     }
