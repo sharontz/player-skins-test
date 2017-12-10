@@ -2,7 +2,7 @@ import {BaseSkin} from "./skin-new"
 
 class CustomSkin extends BaseSkin {
     constructor(template, player) {
-        super(template,player);
+        super(template, player);
     }
 }
 
@@ -14,11 +14,5 @@ const html = `
     </control-bar>
 `
 
-function loadSkin (player){
-    let mySkin = new CustomSkin(html, player);
-    mySkin.render();
-}
-
-window.loadSkin = loadSkin;
-
-loadSkin();
+let mySkin = new CustomSkin(html);
+mySkin.render();

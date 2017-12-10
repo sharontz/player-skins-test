@@ -92,14 +92,8 @@ var CustomSkin = function (_BaseSkin) {
 
 var html = "\n    <control-bar location=\"bottom\" justify-content=\"flex-end\" style=\"height:40px;\">\n        <play-button flex=\"15\"></play-button>\n        <hd-button flex=\"1\"></hd-button>\n        <full-screen-button flex=\"1\"></full-screen-button>\n    </control-bar>\n";
 
-function loadSkin(player) {
-    var mySkin = new CustomSkin(html, player);
-    mySkin.render();
-}
-
-window.loadSkin = loadSkin;
-
-loadSkin();
+var mySkin = new CustomSkin(html);
+mySkin.render();
 
 /***/ }),
 /* 1 */
