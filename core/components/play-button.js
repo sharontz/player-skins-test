@@ -3,11 +3,21 @@ class PlayButton extends HTMLElement {
     constructor() {
         super();
         this.isPlaying = false;
-        this.attachListeners();
     }
 
     attachListeners() {
         this.addEventListener('click', this.clickHandler)
+        this.parentElement.player.addEventListener(vidible.VIDEO_PLAY, this.handlePlay.bind(this));
+        this.parentElement.player.addEventListener(vidible.VIDEO_PAUSE, this.handlePause.bind(this));
+    }
+
+    handlePlay(){
+        this.setAttribute('playing','');
+        this.isPlaying = true;
+    }
+    handlePause(){
+        this.removeAttribute('playing');
+        this.isPlaying = false;
     }
 
     static get observedAttributes() {
@@ -26,6 +36,7 @@ class PlayButton extends HTMLElement {
     connectedCallback() {
         if (!this.shadowRoot)
             this.initShadowDom();
+        this.attachListeners();
         if(this.parentElement.player.getPlayerInfo().playerStatus === 'playing')
             this.isPlaying = true;
     }
@@ -42,11 +53,9 @@ class PlayButton extends HTMLElement {
     clickHandler(e) {
         if (this.hasAttribute('playing')) {
             this.parentElement.player.pause();
-            this.removeAttribute('playing');
         }
         else {
             this.parentElement.player.play();
-            this.setAttribute('playing', '');
         }
     }
 
