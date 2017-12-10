@@ -1,43 +1,60 @@
-
+<script src="../core/base/control-bar.js"></script>
+<script src="../core/components/full-screen-button.js"></script>
+<script src="../core/components/hd-button.js"></script>
 
 <div class="custom-skin">
-    <full-screen-button></full-screen-button>
-    <full-screen-button></full-screen-button>
-    <full-screen-button></full-screen-button>
+    <control-bar location="bottom" justify-content="space-around">
+        <full-screen-button flex="1"></full-screen-button>
+        <hd-button flex="1"></hd-button>
+    </control-bar>
+</div>
+
+<div class="video-container">
+
 </div>
 
 <script>
     class BaseSkin {
 
-        constructor(){
+        constructor() {
 //            this.videoContainer = vdb.getContext(Object.keys(vdb._getContexts())[0]).getPlayer().div;
+            this.videoContainer = document.getElementsByClassName('video-container')[0];
         }
 
-        addToMainContainer(el){
-//            this.videoContainer.appendChild(el);
+        addToMainContainer(el) {
+            this.videoContainer.appendChild(el);
         }
 
-        addToContainer(container, el){
+        addToContainer(container, el) {
             this.videoContainer.getElementsByClassName(container)[0].appendChild(el);
         }
 
-        setTemplate(template){
+        setTemplate(template) {
             this.template = template;
         }
 
-        render(){
-            [...this.template.children].forEach((child)=>{
-                this.addToContainer('control-bar-wrapper', child)
+        render() {
+            [...this.template.children].forEach((child) => {
+                this.addToMainContainer(child);
             })
         }
     }
 
     let mySkin = new BaseSkin();
 
-    mySkin.controlBarWrapper = document.createElement("div");
-    mySkin.controlBarWrapper.classList.add("control-bar-wrapper");
-    mySkin.addToMainContainer(mySkin.controlBarWrapper);
+    /*    mySkin.controlBarWrapper = document.createElement("div");
+        mySkin.controlBarWrapper.classList.add("control-bar-wrapper");
+        mySkin.addToMainContainer(mySkin.controlBarWrapper);*/
 
     mySkin.setTemplate(document.getElementsByClassName("custom-skin")[0]);
     mySkin.render();
 </script>
+
+<style>
+    .video-container {
+        width: 800px;
+        height: 550px;
+        background-color:lightgray;
+        position:relative;
+    }
+</style>
