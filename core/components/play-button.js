@@ -7,8 +7,8 @@ class PlayButton extends HTMLElement {
 
     attachListeners() {
         this.addEventListener('click', this.clickHandler)
-        this.parentElement.player.addEventListener(vidible.VIDEO_PLAY, this.handlePlay.bind(this));
-        this.parentElement.player.addEventListener(vidible.VIDEO_PAUSE, this.handlePause.bind(this));
+        this.parentElement.player.addEventListener(vdb.VIDEO_PLAY, this.handlePlay.bind(this));
+        this.parentElement.player.addEventListener(vdb.VIDEO_PAUSE, this.handlePause.bind(this));
     }
 
     handlePlay(){
