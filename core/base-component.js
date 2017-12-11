@@ -2,26 +2,22 @@
 
 export class BaseComponent extends HTMLElement {
 
-    constructor(){
+    constructor() {
         super();
-    }
-
-    connectedCallback() {
         if (!this.shadowRoot)
             this.initShadowDom();
-        this._updateRendering();
     }
 
     initShadowDom() {
-        let shadowRoot = this.attachShadow({mode: 'open'});
-        shadowRoot.innerHTML = this.template;
+        this.attachShadow({mode: 'open'});
     }
 
     _updateRendering() {
         this.shadowRoot.innerHTML = this.template;
+
     }
 
-    static registerComponent(name, component){
+    static registerComponent(name, component) {
         window.customElements.define(name, component);
     }
 }

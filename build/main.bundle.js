@@ -82,28 +82,32 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function _CustomElement() {
+    return Reflect.construct(HTMLElement, [], this.__proto__.constructor);
+}
+
+;
+Object.setPrototypeOf(_CustomElement.prototype, HTMLElement.prototype);
+Object.setPrototypeOf(_CustomElement, HTMLElement);
+
 // need to extract all of the components' repeating methods to base component
 
-var BaseComponent = exports.BaseComponent = function (_HTMLElement) {
-    _inherits(BaseComponent, _HTMLElement);
+var BaseComponent = exports.BaseComponent = function (_CustomElement2) {
+    _inherits(BaseComponent, _CustomElement2);
 
     function BaseComponent() {
         _classCallCheck(this, BaseComponent);
 
-        return _possibleConstructorReturn(this, (BaseComponent.__proto__ || Object.getPrototypeOf(BaseComponent)).call(this));
+        var _this = _possibleConstructorReturn(this, (BaseComponent.__proto__ || Object.getPrototypeOf(BaseComponent)).call(this));
+
+        if (!_this.shadowRoot) _this.initShadowDom();
+        return _this;
     }
 
     _createClass(BaseComponent, [{
-        key: 'connectedCallback',
-        value: function connectedCallback() {
-            if (!this.shadowRoot) this.initShadowDom();
-            this._updateRendering();
-        }
-    }, {
         key: 'initShadowDom',
         value: function initShadowDom() {
-            var shadowRoot = this.attachShadow({ mode: 'open' });
-            shadowRoot.innerHTML = this.template;
+            this.attachShadow({ mode: 'open' });
         }
     }, {
         key: '_updateRendering',
@@ -118,7 +122,7 @@ var BaseComponent = exports.BaseComponent = function (_HTMLElement) {
     }]);
 
     return BaseComponent;
-}(HTMLElement);
+}(_CustomElement);
 
 exports.default = BaseComponent;
 
@@ -129,7 +133,7 @@ exports.default = BaseComponent;
 "use strict";
 
 
-var _skinNew = __webpack_require__(2);
+var _baseSkin = __webpack_require__(2);
 
 var _controlBar = __webpack_require__(3);
 
@@ -151,12 +155,14 @@ var CustomSkin = function (_BaseSkin) {
     function CustomSkin(template, player) {
         _classCallCheck(this, CustomSkin);
 
-        _skinNew.BaseSkin.loadDeps([{ tagName: 'control-bar', func: _controlBar.ControlBar }, { tagName: 'play-button', func: _playButton.PlayButton }, { tagName: 'full-screen-button', func: _fullScreenButton.FullScreenButton }, { tagName: 'hd-button', func: _hdButton.HDButton }]);
+        _baseSkin.BaseSkin.loadDeps(deps);
         return _possibleConstructorReturn(this, (CustomSkin.__proto__ || Object.getPrototypeOf(CustomSkin)).call(this, template, player));
     }
 
     return CustomSkin;
-}(_skinNew.BaseSkin);
+}(_baseSkin.BaseSkin);
+
+var deps = [{ tagName: 'control-bar', func: _controlBar.ControlBar }, { tagName: 'play-button', func: _playButton.PlayButton }, { tagName: 'full-screen-button', func: _fullScreenButton.FullScreenButton }, { tagName: 'hd-button', func: _hdButton.HDButton }];
 
 var html = "\n    <control-bar location=\"bottom\" justify-content=\"flex-end\" style=\"height:40px;\">\n        <play-button flex=\"15\"></play-button>\n        <hd-button flex=\"1\"></hd-button>\n        <full-screen-button flex=\"1\"></full-screen-button>\n    </control-bar>\n";
 
@@ -201,6 +207,7 @@ var BaseSkin = exports.BaseSkin = function () {
             this.player = player;
             this.videoContainer = player.div;
         }
+        _baseComponent.BaseComponent.prototype.player = this.player;
     }
 
     _createClass(BaseSkin, [{
@@ -234,10 +241,16 @@ var BaseSkin = exports.BaseSkin = function () {
                 _this.addToMainContainer(child);
             });
         }
+    }, {
+        key: 'getPlayer',
+        value: function getPlayer() {
+            return this.player;
+        }
     }], [{
         key: 'loadDeps',
         value: function loadDeps(deps) {
-            deps.forEach(function (dep) {
+            this.deps = deps;
+            this.deps.forEach(function (dep) {
                 _baseComponent.BaseComponent.registerComponent(dep.tagName, dep.func);
             });
         }
@@ -278,15 +291,8 @@ var ControlBar = exports.ControlBar = function (_BaseComponent) {
     function ControlBar() {
         _classCallCheck(this, ControlBar);
 
-        var _this = _possibleConstructorReturn(this, (ControlBar.__proto__ || Object.getPrototypeOf(ControlBar)).call(this));
-
-        _this.tagName = 'control-bar';
-        return _this;
+        return _possibleConstructorReturn(this, (ControlBar.__proto__ || Object.getPrototypeOf(ControlBar)).call(this));
     }
-
-    // get tagName(){
-    //     return 'control-bar';
-    // }
 
     _createClass(ControlBar, [{
         key: 'attributeChangedCallback',
@@ -299,34 +305,42 @@ var ControlBar = exports.ControlBar = function (_BaseComponent) {
             }
         }
     }, {
+        key: 'tagName',
+        get: function get() {
+            return 'control-bar';
+        }
+    }, {
         key: 'location',
         get: function get() {
             return this.getAttribute('location');
         },
         set: function set(val) {
             this.setAttribute('location', val);
-            if (val === 'bottom') {
-                this.shadowRoot.appendChild(this.bottomStyling.cloneNode(true));
-            }
-        }
-    }, {
-        key: 'bottomStyling',
-        get: function get() {
-            var bottomStyling = document.createElement('bottomStyling');
-            bottomStyling.innerHTML = '\n<style>\n :host {\n       position:absolute;\n       bottom:0;\n    }\n</style>\n  ';
-            return bottomStyling;
+            this._updateRendering();
         }
     }, {
         key: 'template',
         get: function get() {
-            var template = document.createElement('template');
-            template.innerHTML = '\n             <slot></slot>\n             <style>\n            ' + this.componentStyle + '\n            </style>\n            ';
-            return template;
+            return '\n             <slot></slot>\n             <style>\n            ' + this.componentStyle + '\n            </style>\n            ';
         }
     }, {
         key: 'componentStyle',
         get: function get() {
-            return ':host {\n        width: 100%;\n        height: 5%;\n        overflow: hidden;\n        display: flex;\n        flex-direction: row;\n        flex-wrap: nowrap;\n        align-items: center;\n        justify-content: space-evenly;\n        background-color:lightgray;\n        /*display: grid;*/\n        /*grid: repeat(1, 100%) / auto-flow auto;*/\n    }\n    \n   :host > *:not(style){\n        width: auto;\n        height: 100%;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n    }\n\n    :host > * svg{\n        width: 100%;\n    }';
+            return ':host {\n        width: 100%;\n        height: 5%;\n        overflow: hidden;\n        display: flex;\n        flex-direction: row;\n        flex-wrap: nowrap;\n        align-items: center;\n        justify-content: space-evenly;\n        background-color:lightgray;\n        position:absolute;\n        ' + this.dynamicPosition + '\n    }\n    \n   :host > *:not(style){\n        width: auto;\n        height: 100%;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n    }\n\n    :host > * svg{\n        width: 100%;\n    }';
+        }
+    }, {
+        key: 'dynamicPosition',
+        get: function get() {
+            switch (this.location) {
+                case 'bottom':
+                    return ' \n                 bottom:0;';
+                    break;
+                case 'top':
+                    return 'top:0;';
+                    break;
+                default:
+                    return '';
+            }
         }
     }], [{
         key: 'observedAttributes',
@@ -373,15 +387,15 @@ var PlayButton = exports.PlayButton = function (_BaseComponent) {
         var _this = _possibleConstructorReturn(this, (PlayButton.__proto__ || Object.getPrototypeOf(PlayButton)).call(this));
 
         _this.isPlaying = false;
+        _this.addEventListener('click', _this.clickHandler);
         return _this;
     }
 
     _createClass(PlayButton, [{
         key: 'attachListeners',
         value: function attachListeners() {
-            this.addEventListener('click', this.clickHandler);
-            this.parentElement.player.addEventListener(vdb.VIDEO_PLAY, this.handlePlay.bind(this));
-            this.parentElement.player.addEventListener(vdb.VIDEO_PAUSE, this.handlePause.bind(this));
+            this.player.addEventListener(vdb.constants.PlayerEvent.VIDEO_PLAY, this.handlePlay.bind(this));
+            this.player.addEventListener(vdb.constants.PlayerEvent.VIDEO_PAUSE, this.handlePause.bind(this));
         }
     }, {
         key: 'handlePlay',
@@ -406,15 +420,17 @@ var PlayButton = exports.PlayButton = function (_BaseComponent) {
     }, {
         key: 'connectedCallback',
         value: function connectedCallback() {
-            if (this.parentElement.player.getPlayerInfo().playerStatus === 'playing') this.isPlaying = true;
+            if (this.player) this.attachListeners();
+            if (this.player.getPlayerInfo().playerStatus === 'playing') this.isPlaying = true;
+            this._updateRendering();
         }
     }, {
         key: 'clickHandler',
         value: function clickHandler(e) {
             if (this.hasAttribute('playing')) {
-                this.parentElement.player.pause();
+                this.player.pause();
             } else {
-                this.parentElement.player.play();
+                this.player.play();
             }
         }
     }, {
@@ -480,12 +496,16 @@ var FullScreenButton = exports.FullScreenButton = function (_BaseComponent) {
 
         var _this = _possibleConstructorReturn(this, (FullScreenButton.__proto__ || Object.getPrototypeOf(FullScreenButton)).call(this));
 
-        _this.registerComponent('full-screen-button');
         _this.attachListeners();
         return _this;
     }
 
     _createClass(FullScreenButton, [{
+        key: 'connectedCallback',
+        value: function connectedCallback() {
+            this._updateRendering();
+        }
+    }, {
         key: 'attachListeners',
         value: function attachListeners() {
             var _this2 = this;
@@ -572,6 +592,11 @@ var HDButton = exports.HDButton = function (_BaseComponent) {
     }
 
     _createClass(HDButton, [{
+        key: 'connectedCallback',
+        value: function connectedCallback() {
+            this._updateRendering();
+        }
+    }, {
         key: 'tagName',
         get: function get() {
             return 'hd-button';

@@ -4,12 +4,12 @@ export class ControlBar extends BaseComponent {
 
     constructor() {
         super();
-        this.tagName = 'control-bar';
     }
 
-    // get tagName(){
-    //     return 'control-bar';
-    // }
+
+    get tagName() {
+        return 'control-bar';
+    }
 
     static get observedAttributes() {
         return ['location', 'justify-content'];
@@ -21,9 +21,7 @@ export class ControlBar extends BaseComponent {
 
     set location(val) {
         this.setAttribute('location', val);
-        if (val === 'bottom') {
-            this.shadowRoot.appendChild(this.bottomStyling.cloneNode(true));
-        }
+        this._updateRendering();
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -35,31 +33,16 @@ export class ControlBar extends BaseComponent {
         }
     }
 
-    get bottomStyling() {
-        let bottomStyling = document.createElement('bottomStyling');
-        bottomStyling.innerHTML = `
-<style>
- :host {
-       position:absolute;
-       bottom:0;
-    }
-</style>
-  `
-        return bottomStyling;
-    }
-
     get template() {
-        let template = document.createElement('template');
-        template.innerHTML = `
+        return `
              <slot></slot>
              <style>
             ${this.componentStyle}
             </style>
-            `
-        return template;
+            `;
     }
 
-    get componentStyle(){
+    get componentStyle() {
         return `:host {
         width: 100%;
         height: 5%;
@@ -70,8 +53,8 @@ export class ControlBar extends BaseComponent {
         align-items: center;
         justify-content: space-evenly;
         background-color:lightgray;
-        /*display: grid;*/
-        /*grid: repeat(1, 100%) / auto-flow auto;*/
+        position:absolute;
+        ${this.dynamicPosition}
     }
     
    :host > *:not(style){
@@ -85,6 +68,21 @@ export class ControlBar extends BaseComponent {
     :host > * svg{
         width: 100%;
     }`
+    }
+
+    get dynamicPosition() {
+        switch (this.location) {
+            case 'bottom':
+                return ` 
+                 bottom:0;`;
+                break;
+            case 'top':
+                return `top:0;`
+                break;
+            default:
+                return ``;
+        }
+
     }
 }
 

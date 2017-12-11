@@ -4,8 +4,11 @@ export class FullScreenButton extends BaseComponent {
 
     constructor() {
         super();
-        this.registerComponent('full-screen-button');
         this.attachListeners();
+    }
+
+    connectedCallback() {
+        this._updateRendering();
     }
 
     attachListeners() {

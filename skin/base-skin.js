@@ -11,6 +11,7 @@ export class BaseSkin {
             this.player = player;
             this.videoContainer = player.div;
         }
+        BaseComponent.prototype.player = this.player;
     }
 
     addToMainContainer(el) {
@@ -39,8 +40,13 @@ export class BaseSkin {
         })
     }
 
+    getPlayer(){
+        return this.player;
+    }
+
     static loadDeps(deps){
-        deps.forEach((dep)=>{
+        this.deps = deps;
+        this.deps.forEach((dep)=>{
             BaseComponent.registerComponent(dep.tagName, dep.func);
         })
     }

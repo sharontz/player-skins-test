@@ -6,6 +6,10 @@ export class HDButton extends BaseComponent {
         super();
     }
 
+    connectedCallback() {
+        this._updateRendering();
+    }
+
     get tagName(){
         return 'hd-button';
     }

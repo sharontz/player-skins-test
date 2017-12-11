@@ -5,6 +5,7 @@ export class PlayButton extends BaseComponent {
     constructor() {
         super();
         this.isPlaying = false;
+        this.addEventListener('click', this.clickHandler);
     }
 
     get tagName(){
@@ -12,9 +13,8 @@ export class PlayButton extends BaseComponent {
     }
 
     attachListeners() {
-        this.addEventListener('click', this.clickHandler)
-        this.parentElement.player.addEventListener(vdb.VIDEO_PLAY, this.handlePlay.bind(this));
-        this.parentElement.player.addEventListener(vdb.VIDEO_PAUSE, this.handlePause.bind(this));
+        this.player.addEventListener(vdb.constants.PlayerEvent.VIDEO_PLAY, this.handlePlay.bind(this));
+        this.player.addEventListener(vdb.constants.PlayerEvent.VIDEO_PAUSE, this.handlePause.bind(this));
     }
 
     handlePlay(){
@@ -40,16 +40,19 @@ export class PlayButton extends BaseComponent {
     }
 
     connectedCallback() {
-        if(this.parentElement.player.getPlayerInfo().playerStatus === 'playing')
+        if(this.player)
+            this.attachListeners();
+        if(this.player.getPlayerInfo().playerStatus === 'playing')
             this.isPlaying = true;
+        this._updateRendering();
     }
 
     clickHandler(e) {
         if (this.hasAttribute('playing')) {
-            this.parentElement.player.pause();
+            this.player.pause();
         }
         else {
-            this.parentElement.player.play();
+            this.player.play();
         }
     }
 
