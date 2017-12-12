@@ -15,7 +15,6 @@ export class BaseSkin {
     }
 
     addToMainContainer(el) {
-        el.player = this.player;
         this.videoContainer.appendChild(el);
     }
 
@@ -35,7 +34,6 @@ export class BaseSkin {
 
     render() {
         [...this.template.children].forEach((child) => {
-            child.player = this.player;
             this.addToMainContainer(child);
         })
     }
